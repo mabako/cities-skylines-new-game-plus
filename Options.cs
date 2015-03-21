@@ -31,7 +31,7 @@ namespace NewGamePlus
                 Base.Config.StartMoney = 70000;
 
             CreateButton("DecreaseMoney", new Vector2(x += spacing, y), "-", DecreaseMoney);
-            label = CreateLabel("StartMoney", new Vector2(x += spacing, y), FormatMoney(Base.Config.StartMoney));
+            label = CreateLabel("StartMoney", new Vector2(x += spacing, y + 3), FormatMoney(Base.Config.StartMoney));
             CreateButton("IncreaseMoney", new Vector2(x += labelWidth, y), "+", IncreaseMoney);
 
             CreateCheckbox(SPRITE_HIGHWAY, new Vector2(x += spacing, y), Base.Config.AllRoads, (e) => Base.Config.AllRoads = e, "all roads enabled from the start");
