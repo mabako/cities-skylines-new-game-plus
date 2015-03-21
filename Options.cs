@@ -1,6 +1,8 @@
 ﻿using ColossalFramework.UI;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+
 namespace NewGamePlus
 {
     class Options
@@ -18,6 +20,8 @@ namespace NewGamePlus
         private UILabel label;
         private const int labelWidth = 140;
         private const long maxMoney = 10000000;
+
+        private IList<UIComponent> components = new List<UIComponent>();
 
         public Options(NewGamePanel newGamePanel)
         {
@@ -63,6 +67,8 @@ namespace NewGamePlus
             label.textColor = new Color32(255, 255, 255, 255);
             label.Invalidate();
 
+            components.Add(label);
+
             return label;
         }
 
@@ -84,6 +90,8 @@ namespace NewGamePlus
             button.hoveredBgSprite = "ButtonMenuHovered";
             button.focusedBgSprite = "ButtonMenuFocused";
             button.pressedBgSprite = "ButtonMenuPressed";
+
+            components.Add(button);
 
             button.eventClick += (UIComponent component, UIMouseEventParameter eventParam) =>
             {
@@ -115,6 +123,9 @@ namespace NewGamePlus
             if (!isEnabled)
                 button.Disable();
 
+            components.Add(button);
+
+            // Doesn't play nicely with enabling/disabling; just changing the sprites produces inconsistent results though.
             button.playAudioEvents = false;
 
             button.eventClick += (UIComponent component, UIMouseEventParameter eventParam) =>
@@ -184,6 +195,14 @@ namespace NewGamePlus
             Configuration.Serialize(Base.Config);
             label.text = FormatMoney(currentMoney);
             label.Invalidate();
+        }
+
+        internal void Show(bool visible)
+        {
+            foreach(var component in components)
+            {
+                component.isVisible = visible;
+            }
         }
     }
 }

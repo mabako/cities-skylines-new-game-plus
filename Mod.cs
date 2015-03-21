@@ -1,4 +1,5 @@
-﻿using ColossalFramework.UI;
+﻿using ColossalFramework.Plugins;
+using ColossalFramework.UI;
 using ICities;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,8 @@ namespace NewGamePlus
 {
     public class ModInfo : IUserMod
     {
+        private Options options = null;
+
         public ModInfo()
         {
             try
@@ -16,12 +19,29 @@ namespace NewGamePlus
                 NewGamePanel newGamePanel = UIView.library.Get<NewGamePanel>("NewGamePanel");
                 if (newGamePanel != null)
                 {
-                    new Options(newGamePanel);
+                    options = new Options(newGamePanel);
                     SimulationManager.RegisterSimulationManager(new NewGamePlusSimManager());
+
+                    pluginsChanged();
+                    PluginManager.instance.eventPluginsChanged += pluginsChanged;
+                    PluginManager.instance.eventPluginsStateChanged += pluginsChanged;
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Debug.LogException(e);
+            }
+        }
+
+        private void pluginsChanged()
+        {
+            foreach (var plugin in PluginManager.instance.GetPluginsInfo())
+            {
+                // Name is only applicable if deployed as local file, otherwise it'll be the string representation of the steam workshop ID
+                if(plugin.publishedFileID.AsUInt64 == 411769510L || plugin.name == "mbkNewGamePlus")
+                {
+                    options.Show(plugin.isEnabled);
+                }
             }
         }
 
