@@ -51,7 +51,7 @@ namespace UnlockAtStart
 
         private static void Unlock()
         {
-            Unlock(typeof(RoadTypes), typeof(Areas));
+            Unlock(typeof(RoadTypes), typeof(Areas), typeof(Service));
         }
 
         private static void Unlock(params Type[] types)
@@ -59,8 +59,14 @@ namespace UnlockAtStart
             foreach (Type t in types)
             {
                 IUnlockable unlockable = Activator.CreateInstance(t) as IUnlockable;
-                if (unlockable != null && unlockable.ShouldUnlock(Config))
-                    unlockable.Unlock();
+                if (unlockable != null)
+                {
+                    bool u = unlockable.ShouldUnlock(Config);
+                    DebugOutputPanel.AddMessage(ColossalFramework.Plugins.PluginManager.MessageType.Message, string.Format("Activating {0} - {1}", unlockable.GetType(), u));
+
+                    if(u)
+                        unlockable.Unlock();
+                }
             }
         }
         public override void OnRefreshMilestones()

@@ -12,6 +12,12 @@ namespace UnlockAtStart
         public bool AllAreas = false;
         public bool FreeAreas = false;
 
+        public bool Ships = true;
+        public bool Trains = true;
+        public bool Airplanes = true;
+        public bool Buses = true;
+        public bool Subways = true;
+
         private static string GetConfigPath()
         {
             // base it on the path Cities: Skylines uses

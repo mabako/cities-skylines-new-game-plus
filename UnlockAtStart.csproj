@@ -54,6 +54,7 @@
     <Compile Include="Areas.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="IUnlockable.cs" />
+    <Compile Include="Service.cs" />
     <Compile Include="RoadTypes.cs" />
     <Compile Include="Mod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
