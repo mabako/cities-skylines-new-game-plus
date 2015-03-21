@@ -1,30 +1,15 @@
-﻿using ICities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using UnityEngine;
 
 namespace UnlockAllRoadTypes
 {
-    public class ModInfo : IUserMod
+    internal class RoadTypes : IUnlockable
     {
-        public string Description
-        {
-            get { return "Start with all Road Types"; }
-        }
-
-        public string Name
-        {
-            get { return "Unlock all Road Types"; }
-        }
-    }
-
-    public class Unlocker : LoadingExtensionBase
-    {
-        public override void OnLevelLoaded(LoadMode mode)
+        public void Unlock()
         {
             for (int index = 0; index < PrefabCollection<NetInfo>.LoadedCount(); ++index)
             {
@@ -44,12 +29,10 @@ namespace UnlockAllRoadTypes
                     var intersectionAI = loaded.m_buildingAI as IntersectionAI;
                     if (intersectionAI != null)
                     {
-                        SetPrivateVariable<MilestoneInfo>(intersectionAI, "m_cachedUnlockMilestone", null);
+                        Base.SetPrivateVariable<MilestoneInfo>(intersectionAI, "m_cachedUnlockMilestone", null);
                     }
                 }
             }
-
-            managers.milestones.UnlockMilestone("Basic Road Created");
         }
 
         private bool UnlockClass(ItemClass itemClass)
@@ -58,10 +41,9 @@ namespace UnlockAllRoadTypes
             return name.Contains("Road") || name == "Highway";
         }
 
-
-        private void SetPrivateVariable<T>(object obj, string fieldName, T value)
+        public bool ShouldUnlock(Configuration config)
         {
-            obj.GetType().GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance).SetValue(obj, value);
+            return config.AllRoads;
         }
     }
 }

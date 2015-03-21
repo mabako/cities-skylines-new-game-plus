@@ -51,7 +51,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UnlockAllRoadTypes.cs" />
+    <Compile Include="Areas.cs" />
+    <Compile Include="Configuration.cs" />
+    <Compile Include="IUnlockable.cs" />
+    <Compile Include="RoadTypes.cs" />
+    <Compile Include="Mod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
