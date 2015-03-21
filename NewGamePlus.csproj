@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NewGamePlus</RootNamespace>
     <AssemblyName>NewGamePlus</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,7 +44,6 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine">
@@ -53,8 +53,10 @@
   <ItemGroup>
     <Compile Include="Areas.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="GameObject.cs" />
     <Compile Include="IUnlockable.cs" />
     <Compile Include="Money.cs" />
+    <Compile Include="Options.cs" />
     <Compile Include="Service.cs" />
     <Compile Include="RoadTypes.cs" />
     <Compile Include="Mod.cs" />

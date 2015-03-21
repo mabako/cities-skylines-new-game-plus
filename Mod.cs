@@ -1,4 +1,5 @@
-﻿using ICities;
+﻿using ColossalFramework.UI;
+using ICities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,20 @@ namespace NewGamePlus
 {
     public class ModInfo : IUserMod
     {
+        public ModInfo()
+        {
+            try
+            {
+                NewGamePanel newGamePanel = UIView.library.Get<NewGamePanel>("NewGamePanel");
+                if (newGamePanel != null)
+                    new Options(newGamePanel);
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
+        }
+
         public string Description
         {
             get { return "Unlock Road Types, all Areas, etc. to be purchasable at Start"; }
