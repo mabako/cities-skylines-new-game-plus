@@ -8,8 +8,10 @@ namespace NewGamePlus
 {
     public class Configuration
     {
-        public bool AllRoads = true;
+        public bool AllRoads = false;
         public bool AllAreas = false;
+
+        // Unused.
         public bool FreeAreas = false;
 
         public bool Ships = false;
@@ -27,7 +29,7 @@ namespace NewGamePlus
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
 
-            path += "unlock-all-at-start.xml";
+            path += "new-game-plus.xm";
 
             return path;
         }

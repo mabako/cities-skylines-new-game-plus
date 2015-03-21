@@ -2,10 +2,7 @@
 using ICities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace NewGamePlus
@@ -18,11 +15,13 @@ namespace NewGamePlus
             {
                 NewGamePanel newGamePanel = UIView.library.Get<NewGamePanel>("NewGamePanel");
                 if (newGamePanel != null)
+                {
                     new Options(newGamePanel);
+                    SimulationManager.RegisterSimulationManager(new NewGamePlusSimManager());
+                }
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Debug.LogException(e);
             }
         }
 
@@ -41,6 +40,9 @@ namespace NewGamePlus
     {
         private static Configuration config = null;
 
+        // NewGame/LoadGame usually.
+        internal static SimulationManager.UpdateMode mode = SimulationManager.UpdateMode.Undefined;
+
         internal static Configuration Config
         {
             get
@@ -51,6 +53,10 @@ namespace NewGamePlus
                     Configuration.Serialize(config);
                 }
                 return config;
+            }
+            set
+            {
+                config = value;
             }
         }
         internal static void SetPrivateVariable<T>(object obj, string fieldName, T value)
@@ -63,13 +69,19 @@ namespace NewGamePlus
             return (T)obj.GetType().GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance).GetValue(obj);
         }
 
-
-        private static void Unlock()
+        /// <summary>
+        /// Unlock all unlockables if configured to.
+        /// </summary>
+        internal static void Unlock()
         {
             Unlock(typeof(RoadTypes), typeof(Areas), typeof(Service));
         }
 
-        private static void Unlock(params Type[] types)
+        /// <summary>
+        /// Unlocks all given parameter types if they should.
+        /// </summary>
+        /// <param name="types"></param>
+        internal static void Unlock(params Type[] types)
         {
             foreach (Type t in types)
             {
@@ -81,12 +93,93 @@ namespace NewGamePlus
                 }
             }
         }
+
+        /// <summary>
+        /// Please note we could -technically- use our SimulationManager instance to store this data.
+        /// I have no clue what would happen, most likely removing the mod would break your savegame.
+        /// </summary>
+        /// <returns></returns>
+        private bool LoadData()
+        {
+            config = new Configuration();
+
+            byte[] data;
+            if(SimulationManager.instance.m_serializableDataStorage.TryGetValue("NewGamePlus/Storage", out data))
+            {
+                if (data != null && data.Length > 0)
+                {
+                    switch(data[0])
+                    {
+                        case 0x1:
+                            {
+                                if(data.Length != 2)
+                                    return false;
+
+                                // Savegame version 1.
+                                byte x = data[1];
+                                config.Airplanes = (x & 0x1) != 0;
+                                config.AllAreas = (x & 0x2) != 0;
+                                config.AllRoads = (x & 0x4) != 0;
+                                config.Buses = (x & 0x8) != 0;
+                                config.FreeAreas = (x & 0x10) != 0;
+                                config.Ships = (x & 0x20) != 0;
+                                config.Subways = (x & 0x40) != 0;
+                                config.Trains = (x & 0x80) != 0;
+
+                                DebugOutputPanel.AddMessage(ColossalFramework.Plugins.PluginManager.MessageType.Message, "LETS CONFIGURE SHIZZLE " + Convert.ToString(data[0], 2).PadLeft(8, '0') + " " + Convert.ToString(data[1], 2).PadLeft(8, '0'));
+                                DebugOutputPanel.AddMessage(ColossalFramework.Plugins.PluginManager.MessageType.Message, string.Format("Metro: {0} Tr: {0}", config.Subways, config.Trains));
+
+                                return true;
+                            }
+                    }
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Please note we could -technically- use our SimulationManager instance to store this data.
+        /// I have no clue what would happen, most likely removing the mod would break your savegame.
+        /// </summary>
+        internal static void SaveData()
+        {
+            byte[] data = new byte[2];
+            data[0] = 0x1;
+
+            data[1] |= ((byte)(Config.Airplanes ? 0x1 : 0));
+            data[1] |= ((byte)(Config.AllAreas ? 0x2 : 0));
+            data[1] |= ((byte)(Config.AllRoads ? 0x4 : 0));
+            data[1] |= ((byte)(Config.Buses ? 0x8 : 0));
+            data[1] |= ((byte)(Config.FreeAreas ? 0x10 : 0));
+            data[1] |= ((byte)(Config.Ships ? 0x20 : 0));
+            data[1] |= ((byte)(Config.Subways ? 0x40 : 0));
+            data[1] |= ((byte)(Config.Trains ? 0x80 : 0));
+
+            SimulationManager.instance.m_serializableDataStorage["NewGamePlus/Storage"] = data;
+            DebugOutputPanel.AddMessage(ColossalFramework.Plugins.PluginManager.MessageType.Message, string.Format("Saved shizzle M: {0} T: {0}", config.Subways, config.Trains));
+        }
+
+        /// <summary>
+        /// Note that this function is executed -before- LoadingExtension's OnLevelLoaded is.
+        /// </summary>
         public override void OnRefreshMilestones()
         {
-            DebugOutputPanel.AddMessage(ColossalFramework.Plugins.PluginManager.MessageType.Message, "OnRefreshMilestones");
-
             milestonesManager.UnlockMilestone("Basic Road Created");
-            Unlock();
+
+            // DebugOutputPanel.AddMessage(ColossalFramework.Plugins.PluginManager.MessageType.Message, string.Format("Yo, we're refreshing your milestones in {0} mode", mode));
+
+            switch(mode)
+            {
+                case SimulationManager.UpdateMode.NewGame:
+                    SaveData();
+                    Unlock();
+                    break;
+
+                case SimulationManager.UpdateMode.LoadGame:
+                    LoadData();
+                    Unlock();
+                    break;
+            }
         }
     }
 }

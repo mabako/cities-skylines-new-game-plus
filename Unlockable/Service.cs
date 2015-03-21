@@ -13,8 +13,10 @@ namespace NewGamePlus
             // Disable the milestones for opening the GUI
             UnlockManager.instance.m_properties.m_ServiceMilestones[(int)ItemClass.Service.PublicTransport] = null;
             
-            // Let all panels be viewed, to prevent some rather odd bug with an empty panel to show
+            // Let all panels be viewed, to prevent some rather odd bug with an empty panel showing upon opening the menu
             UnlockManager.instance.m_properties.m_SubServiceMilestones[(int)ItemClass.SubService.PublicTransportBus] = null;
+
+            // Just for consistency really as we can see the first + all unlocked panels anyway
             UnlockManager.instance.m_properties.m_SubServiceMilestones[(int)ItemClass.SubService.PublicTransportMetro] = null;
             UnlockManager.instance.m_properties.m_SubServiceMilestones[(int)ItemClass.SubService.PublicTransportPlane] = null;
             UnlockManager.instance.m_properties.m_SubServiceMilestones[(int)ItemClass.SubService.PublicTransportShip] = null;
@@ -29,7 +31,7 @@ namespace NewGamePlus
                 show = show || (Base.Config.Buses && loaded.category == "PublicTransportBus");
                 show = show || (Base.Config.Subways && loaded.category == "PublicTransportMetro");
                 show = show || (Base.Config.Ships && loaded.category == "PublicTransportShip");
-                show = show || (Base.Config.Trains && loaded.category == "PublicTransportTrain"); // || loaded.m_class.name == "Train Track"));
+                show = show || (Base.Config.Trains && loaded.category == "PublicTransportTrain");
                 show = show || (Base.Config.Airplanes && loaded.category == "PublicTransportPlane");
 
                 if(show)
