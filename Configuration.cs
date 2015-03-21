@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace UnlockAtStart
+namespace NewGamePlus
 {
     public class Configuration
     {
@@ -12,11 +12,13 @@ namespace UnlockAtStart
         public bool AllAreas = false;
         public bool FreeAreas = false;
 
-        public bool Ships = true;
-        public bool Trains = true;
-        public bool Airplanes = true;
-        public bool Buses = true;
-        public bool Subways = true;
+        public bool Ships = false;
+        public bool Trains = false;
+        public bool Airplanes = false;
+        public bool Buses = false;
+        public bool Subways = false;
+
+        public long StartMoney = -1;
 
         private static string GetConfigPath()
         {

@@ -7,8 +7,8 @@
     <ProjectGuid>{D1DDA07F-6C58-42EF-9013-CA9ADC14C526}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>UnlockAtStart</RootNamespace>
-    <AssemblyName>UnlockAtStart</AssemblyName>
+    <RootNamespace>NewGamePlus</RootNamespace>
+    <AssemblyName>NewGamePlus</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -54,6 +54,7 @@
     <Compile Include="Areas.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="IUnlockable.cs" />
+    <Compile Include="Money.cs" />
     <Compile Include="Service.cs" />
     <Compile Include="RoadTypes.cs" />
     <Compile Include="Mod.cs" />

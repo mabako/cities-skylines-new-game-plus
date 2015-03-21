@@ -4,14 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UnlockAtStart
+namespace NewGamePlus
 {
     class Service : IUnlockable
     {
         public void Unlock()
         {
-            DebugOutputPanel.AddMessage(ColossalFramework.Plugins.PluginManager.MessageType.Warning, "Hey ho");
-
             // Disable the milestones for opening the GUI
             UnlockManager.instance.m_properties.m_ServiceMilestones[(int)ItemClass.Service.PublicTransport] = null;
             

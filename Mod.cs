@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace UnlockAtStart
+namespace NewGamePlus
 {
     public class ModInfo : IUserMod
     {
@@ -61,10 +61,7 @@ namespace UnlockAtStart
                 IUnlockable unlockable = Activator.CreateInstance(t) as IUnlockable;
                 if (unlockable != null)
                 {
-                    bool u = unlockable.ShouldUnlock(Config);
-                    DebugOutputPanel.AddMessage(ColossalFramework.Plugins.PluginManager.MessageType.Message, string.Format("Activating {0} - {1}", unlockable.GetType(), u));
-
-                    if(u)
+                    if(unlockable.ShouldUnlock(Config))
                         unlockable.Unlock();
                 }
             }

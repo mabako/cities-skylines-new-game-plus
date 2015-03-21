@@ -1,6 +1,6 @@
 ﻿using ICities;
 
-namespace UnlockAtStart
+namespace NewGamePlus
 {
     internal class Areas : IUnlockable
     {
