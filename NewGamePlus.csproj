@@ -53,7 +53,6 @@
   <ItemGroup>
     <Compile Include="Areas.cs" />
     <Compile Include="Configuration.cs" />
-    <Compile Include="GameObject.cs" />
     <Compile Include="IUnlockable.cs" />
     <Compile Include="Money.cs" />
     <Compile Include="Options.cs" />

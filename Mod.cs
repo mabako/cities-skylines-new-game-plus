@@ -83,6 +83,8 @@ namespace NewGamePlus
         }
         public override void OnRefreshMilestones()
         {
+            DebugOutputPanel.AddMessage(ColossalFramework.Plugins.PluginManager.MessageType.Message, "OnRefreshMilestones");
+
             milestonesManager.UnlockMilestone("Basic Road Created");
             Unlock();
         }

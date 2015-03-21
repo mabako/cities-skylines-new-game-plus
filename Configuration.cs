@@ -18,7 +18,7 @@ namespace NewGamePlus
         public bool Buses = false;
         public bool Subways = false;
 
-        public long StartMoney = -1;
+        public long StartMoney = 70000;
 
         private static string GetConfigPath()
         {
