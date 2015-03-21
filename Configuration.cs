@@ -4,12 +4,13 @@ using System.IO;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace UnlockAllRoadTypes
+namespace UnlockAtStart
 {
     public class Configuration
     {
         public bool AllRoads = true;
         public bool AllAreas = false;
+        public bool FreeAreas = false;
 
         private static string GetConfigPath()
         {

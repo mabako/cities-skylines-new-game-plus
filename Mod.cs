@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace UnlockAllRoadTypes
+namespace UnlockAtStart
 {
     public class ModInfo : IUserMod
     {
@@ -24,6 +24,20 @@ namespace UnlockAllRoadTypes
 
     public class Base : MilestonesExtensionBase
     {
+        private static Configuration config = null;
+
+        internal static Configuration Config
+        {
+            get
+            {
+                if(config == null)
+                {
+                    config = Configuration.Deserialize() ?? new Configuration();
+                    Configuration.Serialize(config);
+                }
+                return config;
+            }
+        }
         internal static void SetPrivateVariable<T>(object obj, string fieldName, T value)
         {
             obj.GetType().GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance).SetValue(obj, value);
@@ -37,18 +51,15 @@ namespace UnlockAllRoadTypes
 
         private static void Unlock()
         {
-            Configuration config = Configuration.Deserialize() ?? new Configuration();
-            Configuration.Serialize(config);
-
-            Unlock(config, typeof(RoadTypes), typeof(Areas));
+            Unlock(typeof(RoadTypes), typeof(Areas));
         }
 
-        private static void Unlock(Configuration config, params Type[] types)
+        private static void Unlock(params Type[] types)
         {
             foreach (Type t in types)
             {
                 IUnlockable unlockable = Activator.CreateInstance(t) as IUnlockable;
-                if (unlockable != null && unlockable.ShouldUnlock(config))
+                if (unlockable != null && unlockable.ShouldUnlock(Config))
                     unlockable.Unlock();
             }
         }
