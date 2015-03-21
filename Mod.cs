@@ -126,9 +126,6 @@ namespace NewGamePlus
                                 config.Subways = (x & 0x40) != 0;
                                 config.Trains = (x & 0x80) != 0;
 
-                                DebugOutputPanel.AddMessage(ColossalFramework.Plugins.PluginManager.MessageType.Message, "LETS CONFIGURE SHIZZLE " + Convert.ToString(data[0], 2).PadLeft(8, '0') + " " + Convert.ToString(data[1], 2).PadLeft(8, '0'));
-                                DebugOutputPanel.AddMessage(ColossalFramework.Plugins.PluginManager.MessageType.Message, string.Format("Metro: {0} Tr: {0}", config.Subways, config.Trains));
-
                                 return true;
                             }
                     }
@@ -156,7 +153,6 @@ namespace NewGamePlus
             data[1] |= ((byte)(Config.Trains ? 0x80 : 0));
 
             SimulationManager.instance.m_serializableDataStorage["NewGamePlus/Storage"] = data;
-            DebugOutputPanel.AddMessage(ColossalFramework.Plugins.PluginManager.MessageType.Message, string.Format("Saved shizzle M: {0} T: {0}", config.Subways, config.Trains));
         }
 
         /// <summary>
