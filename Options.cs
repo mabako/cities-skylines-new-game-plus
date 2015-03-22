@@ -21,13 +21,13 @@ namespace NewGamePlus
         private const int labelWidth = 140;
         private const long maxMoney = 10000000;
 
-        private IList<UIComponent> components = new List<UIComponent>();
+        private UIPanel ngpPanel;
 
         public Options(NewGamePanel newGamePanel)
         {
             this.newGamePanel = newGamePanel;
 
-            UIPanel ngpPanel = newGamePanel.component.AddUIComponent<UIPanel>();
+            ngpPanel = newGamePanel.component.AddUIComponent<UIPanel>();
             UIComponent newgameCaption = newGamePanel.component.Find("Caption");
             UIComponent closeButton = newGamePanel.component.Find("Close");
 
@@ -217,10 +217,7 @@ namespace NewGamePlus
 
         internal void Show(bool visible)
         {
-            foreach(var component in components)
-            {
-                component.isVisible = visible;
-            }
+            ngpPanel.isVisible = visible;
         }
     }
 }
