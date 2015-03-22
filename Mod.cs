@@ -18,8 +18,10 @@ namespace NewGamePlus
             try
             {
                 NewGamePanel newGamePanel = UIView.library.Get<NewGamePanel>("NewGamePanel");
-                if (newGamePanel != null && options == null)
+                if (newGamePanel != null)
                 {
+                    if(options != null)
+                        options.Destroy();
                     options = new Options(newGamePanel);
 
                     SimulationManager.RegisterSimulationManager(new NewGamePlusSimManager());
@@ -52,6 +54,7 @@ namespace NewGamePlus
             }
             catch(Exception e)
             {
+                Debug.LogException(e);
                 DebugOutputPanel.AddMessage(PluginManager.MessageType.Warning, "[NG+] " + e.GetType() + ": " + e.Message);
             }
         }

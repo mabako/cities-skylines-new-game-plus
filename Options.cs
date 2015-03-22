@@ -27,7 +27,7 @@ namespace NewGamePlus
         {
             this.newGamePanel = newGamePanel;
 
-            ngpPanel = newGamePanel.component.AddUIComponent<UIPanel>();
+            this.ngpPanel = newGamePanel.component.AddUIComponent<UIPanel>();
             UIComponent newgameCaption = newGamePanel.component.Find("Caption");
             UIComponent closeButton = newGamePanel.component.Find("Close");
 
@@ -218,6 +218,21 @@ namespace NewGamePlus
         internal void Show(bool visible)
         {
             ngpPanel.isVisible = visible;
+        }
+
+        internal void Destroy()
+        {
+            // Let's check if the game destroyed the parent panel since
+            // I mean, not like this is a great solution.
+            try
+            {
+                var gameObject = ngpPanel.gameObject;
+            }
+            catch(NullReferenceException)
+            {
+                DebugOutputPanel.AddMessage(ColossalFramework.Plugins.PluginManager.MessageType.Message, "[NG+] Rebuilding UI...");
+                UIPanel.Destroy(ngpPanel);
+            }
         }
     }
 }
