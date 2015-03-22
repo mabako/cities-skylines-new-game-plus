@@ -31,9 +31,9 @@ namespace NewGamePlus
             UIComponent newgameCaption = newGamePanel.component.Find("Caption");
             UIComponent closeButton = newGamePanel.component.Find("Close");
 
-			// uncomment if you want it visible
-//            ngpPanel.backgroundSprite = "";
-//            ngpPanel.color = new Color32(255,255,255,255);
+            // uncomment if you want it visible
+            // ngpPanel.backgroundSprite = "";
+            // ngpPanel.color = new Color32(255,255,255,255);
 
             ngpPanel.width = newGamePanel.component.width;
             ngpPanel.height = newgameCaption.height * 0.9f;
@@ -41,7 +41,7 @@ namespace NewGamePlus
             ngpPanel.autoLayout = true;
             ngpPanel.autoLayoutDirection = LayoutDirection.Horizontal;
             ngpPanel.autoLayoutStart = LayoutStart.TopLeft;
-            ngpPanel.autoLayoutPadding = new RectOffset(4,4,2,2);
+            ngpPanel.autoLayoutPadding = new RectOffset(4, 4, 2, 2);
 
             if (Base.Config.StartMoney < 0 || Base.Config.StartMoney > maxMoney)
                 Base.Config.StartMoney = 70000;
@@ -54,17 +54,17 @@ namespace NewGamePlus
             CreateCheckbox(SPRITE_HIGHWAY, ngpPanel, Base.Config.AllRoads, (e) => Base.Config.AllRoads = e, "all roads enabled from the start");
             CreateCheckbox(SPRITE_AREA, ngpPanel, Base.Config.AllAreas, (e) => Base.Config.AllAreas = e, "all areas purchaseable from the start");
 
-            CreateCheckbox(SPRITE_BUS,   ngpPanel, Base.Config.Buses, (e) => Base.Config.Buses = e, "busses enabled from the start");
+            CreateCheckbox(SPRITE_BUS, ngpPanel, Base.Config.Buses, (e) => Base.Config.Buses = e, "busses enabled from the start");
             CreateCheckbox(SPRITE_METRO, ngpPanel, Base.Config.Subways, (e) => Base.Config.Subways = e, "metros enabled from the start");
             CreateCheckbox(SPRITE_TRAIN, ngpPanel, Base.Config.Trains, (e) => Base.Config.Trains = e, "trains enabled from the start");
-            CreateCheckbox(SPRITE_SHIP,  ngpPanel, Base.Config.Ships, (e) => Base.Config.Ships = e, "ships enabled from the start");
+            CreateCheckbox(SPRITE_SHIP, ngpPanel, Base.Config.Ships, (e) => Base.Config.Ships = e, "ships enabled from the start");
             CreateCheckbox(SPRITE_PLANE, ngpPanel, Base.Config.Airplanes, (e) => Base.Config.Airplanes = e, "airports enabled from the start");
 
             ngpPanel.pivot = UIPivotPoint.TopRight;
-            ngpPanel.transformPosition = new Vector3(closeButton.GetBounds().max.x, closeButton.GetBounds().min.y,0);
+            ngpPanel.transformPosition = new Vector3(closeButton.GetBounds().max.x, closeButton.GetBounds().min.y, 0);
             ngpPanel.relativePosition += new Vector3(0, 3, 0);
 
-			// I don't know why you can resize the panel after it has been placed, but it works and resizing it seems to be necessary
+            // I don't know why you can resize the panel after it has been placed, but it works and resizing it seems to be necessary
             ngpPanel.width = getChildrenWidth(ngpPanel);
         }
 
@@ -91,9 +91,9 @@ namespace NewGamePlus
             label.textAlignment = UIHorizontalAlignment.Center;
             label.verticalAlignment = UIVerticalAlignment.Middle;
             label.textColor = new Color32(255, 255, 255, 255);
-            label.absolutePosition = new Vector3(0,50,0);
+            label.absolutePosition = new Vector3(0, 50, 0);
 
-			// same height as parent = middle alignment works
+            // same height as parent = middle alignment works
             label.autoSize = false;
             label.height = panel.height;
 
