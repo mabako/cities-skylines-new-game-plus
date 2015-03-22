@@ -10,16 +10,17 @@ namespace NewGamePlus
 {
     public class ModInfo : IUserMod
     {
-        private Options options = null;
+        private static Options options = null;
 
         public ModInfo()
         {
             try
             {
                 NewGamePanel newGamePanel = UIView.library.Get<NewGamePanel>("NewGamePanel");
-                if (newGamePanel != null)
+                if (newGamePanel != null && options == null)
                 {
                     options = new Options(newGamePanel);
+
                     SimulationManager.RegisterSimulationManager(new NewGamePlusSimManager());
 
                     pluginsChanged();
@@ -38,8 +39,10 @@ namespace NewGamePlus
             foreach (var plugin in PluginManager.instance.GetPluginsInfo())
             {
                 // Name is only applicable if deployed as local file, otherwise it'll be the string representation of the steam workshop ID
+                // Debug.LogFormat("Detecting plugins... {0}/{1} -> {2}", plugin.publishedFileID.AsUInt64, plugin.name, plugin.isEnabled);
                 if(plugin.publishedFileID.AsUInt64 == 411769510L || plugin.name == "mbkNewGamePlus")
                 {
+                    // Debug.LogFormat("Found self.");
                     options.Show(plugin.isEnabled);
                 }
             }
