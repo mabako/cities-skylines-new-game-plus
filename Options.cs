@@ -46,10 +46,10 @@ namespace NewGamePlus
             if (Base.Config.StartMoney < 0 || Base.Config.StartMoney > maxMoney)
                 Base.Config.StartMoney = 70000;
 
-            CreateButton("DecreaseMoney", ngpPanel, "-", DecreaseMoney);
-            label = CreateLabel("StartMoney", ngpPanel, FormatMoney(maxMoney));
+            CreateButton(ngpPanel, "-", DecreaseMoney);
+            label = CreateLabel(ngpPanel, FormatMoney(maxMoney));
             label.text = FormatMoney(Base.Config.StartMoney);
-            CreateButton("IncreaseMoney", ngpPanel, "+", IncreaseMoney);
+            CreateButton(ngpPanel, "+", IncreaseMoney);
 
             CreateCheckbox(SPRITE_HIGHWAY, ngpPanel, Base.Config.AllRoads, (e) => Base.Config.AllRoads = e, "all roads enabled from the start");
             CreateCheckbox(SPRITE_AREA, ngpPanel, Base.Config.AllAreas, (e) => Base.Config.AllAreas = e, "all areas purchaseable from the start");
@@ -80,7 +80,7 @@ namespace NewGamePlus
             return width;
         }
 
-        private UILabel CreateLabel(string type, UIPanel panel, string text)
+        private UILabel CreateLabel(UIPanel panel, string text)
         {
 
             UILabel label = panel.AddUIComponent<UILabel>();
@@ -100,7 +100,7 @@ namespace NewGamePlus
             return label;
         }
 
-        private void CreateButton(string type, UIPanel panel, string text, Action<object> onClick)
+        private void CreateButton(UIPanel panel, string text, Action<object> onClick)
         {
             UIButton button = panel.AddUIComponent<UIButton>();
 
