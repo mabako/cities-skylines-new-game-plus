@@ -21,64 +21,89 @@ namespace NewGamePlus
         private const int labelWidth = 140;
         private const long maxMoney = 10000000;
 
-        private IList<UIComponent> components = new List<UIComponent>();
+        private UIPanel ngpPanel;
 
         public Options(NewGamePanel newGamePanel)
         {
             this.newGamePanel = newGamePanel;
 
-            int x = 900;
-            int y = 240;
-            int spacing = 35;
+            ngpPanel = newGamePanel.component.AddUIComponent<UIPanel>();
+            UIComponent newgameCaption = newGamePanel.component.Find("Caption");
+            UIComponent closeButton = newGamePanel.component.Find("Close");
+
+            // uncomment if you want it visible
+            // ngpPanel.backgroundSprite = "";
+            // ngpPanel.color = new Color32(255,255,255,255);
+
+            ngpPanel.width = newGamePanel.component.width;
+            ngpPanel.height = newgameCaption.height * 0.9f;
+
+            ngpPanel.autoLayout = true;
+            ngpPanel.autoLayoutDirection = LayoutDirection.Horizontal;
+            ngpPanel.autoLayoutStart = LayoutStart.TopLeft;
+            ngpPanel.autoLayoutPadding = new RectOffset(4, 4, 2, 2);
 
             if (Base.Config.StartMoney < 0 || Base.Config.StartMoney > maxMoney)
                 Base.Config.StartMoney = 70000;
 
-            CreateButton("DecreaseMoney", new Vector2(x += spacing, y), "-", DecreaseMoney);
-            label = CreateLabel("StartMoney", new Vector2(x += spacing, y + 3), FormatMoney(Base.Config.StartMoney));
-            CreateButton("IncreaseMoney", new Vector2(x += labelWidth, y), "+", IncreaseMoney);
+            CreateButton("DecreaseMoney", ngpPanel, "-", DecreaseMoney);
+            label = CreateLabel("StartMoney", ngpPanel, FormatMoney(maxMoney));
+            label.text = FormatMoney(Base.Config.StartMoney);
+            CreateButton("IncreaseMoney", ngpPanel, "+", IncreaseMoney);
 
-            CreateCheckbox(SPRITE_HIGHWAY, new Vector2(x += spacing, y), Base.Config.AllRoads, (e) => Base.Config.AllRoads = e, "all roads enabled from the start");
-            CreateCheckbox(SPRITE_AREA, new Vector2(x += spacing, y), Base.Config.AllAreas, (e) => Base.Config.AllAreas = e, "all areas purchaseable from the start");
+            CreateCheckbox(SPRITE_HIGHWAY, ngpPanel, Base.Config.AllRoads, (e) => Base.Config.AllRoads = e, "all roads enabled from the start");
+            CreateCheckbox(SPRITE_AREA, ngpPanel, Base.Config.AllAreas, (e) => Base.Config.AllAreas = e, "all areas purchaseable from the start");
 
-            x += 10;
+            CreateCheckbox(SPRITE_BUS, ngpPanel, Base.Config.Buses, (e) => Base.Config.Buses = e, "busses enabled from the start");
+            CreateCheckbox(SPRITE_METRO, ngpPanel, Base.Config.Subways, (e) => Base.Config.Subways = e, "metros enabled from the start");
+            CreateCheckbox(SPRITE_TRAIN, ngpPanel, Base.Config.Trains, (e) => Base.Config.Trains = e, "trains enabled from the start");
+            CreateCheckbox(SPRITE_SHIP, ngpPanel, Base.Config.Ships, (e) => Base.Config.Ships = e, "ships enabled from the start");
+            CreateCheckbox(SPRITE_PLANE, ngpPanel, Base.Config.Airplanes, (e) => Base.Config.Airplanes = e, "airports enabled from the start");
 
-            CreateCheckbox(SPRITE_BUS, new Vector2(x += spacing, y), Base.Config.Buses, (e) => Base.Config.Buses = e, "busses enabled from the start");
-            CreateCheckbox(SPRITE_METRO, new Vector2(x += spacing, y), Base.Config.Subways, (e) => Base.Config.Subways = e, "metros enabled from the start");
-            CreateCheckbox(SPRITE_TRAIN, new Vector2(x += spacing, y), Base.Config.Trains, (e) => Base.Config.Trains = e, "trains enabled from the start");
-            CreateCheckbox(SPRITE_SHIP, new Vector2(x += spacing, y), Base.Config.Ships, (e) => Base.Config.Ships = e, "ships enabled from the start");
-            CreateCheckbox(SPRITE_PLANE, new Vector2(x += spacing, y), Base.Config.Airplanes, (e) => Base.Config.Airplanes = e, "airports enabled from the start");
+            ngpPanel.pivot = UIPivotPoint.TopRight;
+            ngpPanel.transformPosition = new Vector3(closeButton.GetBounds().max.x, closeButton.GetBounds().min.y, 0);
+            ngpPanel.relativePosition += new Vector3(0, 3, 0);
+
+            // I don't know why you can resize the panel after it has been placed, but it works and resizing it seems to be necessary
+            ngpPanel.width = getChildrenWidth(ngpPanel);
         }
 
-        private UILabel CreateLabel(string type, Vector2 location, string text)
+        float getChildrenWidth (UIPanel ngpPanel)
+        {
+            float width = 0;
+            UIComponent[] children = ngpPanel.GetComponentsInChildren<UIComponent>();
+            foreach (UIComponent child in children) {
+                if(child == ngpPanel) continue;
+
+                width += child.width + ngpPanel.autoLayoutPadding.left + ngpPanel.autoLayoutPadding.right;
+            }
+            return width;
+        }
+
+        private UILabel CreateLabel(string type, UIPanel panel, string text)
         {
 
-            var lblObject = new GameObject("NewGamePlusUI/" + type, typeof(UILabel));
-            lblObject.transform.parent = newGamePanel.transform;
-            var label = lblObject.GetComponent<UILabel>();
+            UILabel label = panel.AddUIComponent<UILabel>();
 
-            label.absolutePosition = location;
-            label.width = labelWidth;
-            label.height = 30;
+            label.autoSize = true;
             label.text = text;
             label.textScale = 1.1f;
             label.textAlignment = UIHorizontalAlignment.Center;
             label.verticalAlignment = UIVerticalAlignment.Middle;
             label.textColor = new Color32(255, 255, 255, 255);
-            label.Invalidate();
+            label.absolutePosition = new Vector3(0, 50, 0);
 
-            components.Add(label);
+            // same height as parent = middle alignment works
+            label.autoSize = false;
+            label.height = panel.height;
 
             return label;
         }
 
-        private void CreateButton(string type, Vector2 location, string text, Action<object> onClick)
+        private void CreateButton(string type, UIPanel panel, string text, Action<object> onClick)
         {
-            var btnObject = new GameObject("NewGamePlusUI/" + type, typeof(UIButton));
-            btnObject.transform.parent = newGamePanel.transform;
-            var button = btnObject.GetComponent<UIButton>();
+            UIButton button = panel.AddUIComponent<UIButton>();
 
-            button.absolutePosition = location;
             button.width = 30;
             button.height = 30;
             button.text = text;
@@ -91,8 +116,6 @@ namespace NewGamePlus
             button.focusedBgSprite = "ButtonMenuFocused";
             button.pressedBgSprite = "ButtonMenuPressed";
 
-            components.Add(button);
-
             button.eventClick += (UIComponent component, UIMouseEventParameter eventParam) =>
             {
                 if (component != button || eventParam.buttons != UIMouseButton.Left)
@@ -102,13 +125,10 @@ namespace NewGamePlus
             };
         }
 
-        private void CreateCheckbox(string type, Vector2 location, bool isEnabled, Action<bool> setEnabled, string tooltip)
+        private void CreateCheckbox(string type, UIPanel panel, bool isEnabled, Action<bool> setEnabled, string tooltip)
         {
-            var btnObject = new GameObject("NewGamePlusUI/" + type, typeof(UIButton));
-            btnObject.transform.parent = newGamePanel.transform;
-            var button = btnObject.GetComponent<UIButton>();
+            UIButton button = panel.AddUIComponent<UIButton>();
 
-            button.absolutePosition = location;
             button.width = 30;
             button.height = 30;
             button.textColor = new Color32(255, 255, 255, 255);
@@ -122,8 +142,6 @@ namespace NewGamePlus
 
             if (!isEnabled)
                 button.Disable();
-
-            components.Add(button);
 
             // Doesn't play nicely with enabling/disabling; just changing the sprites produces inconsistent results though.
             button.playAudioEvents = false;
@@ -199,10 +217,7 @@ namespace NewGamePlus
 
         internal void Show(bool visible)
         {
-            foreach(var component in components)
-            {
-                component.isVisible = visible;
-            }
+            ngpPanel.isVisible = visible;
         }
     }
 }
