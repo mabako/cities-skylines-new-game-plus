@@ -73,6 +73,7 @@ namespace NewGamePlus
     public class Base : MilestonesExtensionBase
     {
         private static Configuration config = null;
+        private static Type[] lockables = new Type[] { typeof(RoadTypes), typeof(Areas), typeof(Service) };
 
         // NewGame/LoadGame usually.
         internal static SimulationManager.UpdateMode mode = SimulationManager.UpdateMode.Undefined;
@@ -108,20 +109,12 @@ namespace NewGamePlus
         /// </summary>
         internal static void Unlock()
         {
-            Unlock(typeof(RoadTypes), typeof(Areas), typeof(Service));
-        }
-
-        /// <summary>
-        /// Unlocks all given parameter types if they should.
-        /// </summary>
-        /// <param name="types"></param>
-        internal static void Unlock(params Type[] types)
-        {
-            foreach (Type t in types)
+            foreach (Type t in lockables)
             {
                 IUnlockable unlockable = Activator.CreateInstance(t) as IUnlockable;
                 if (unlockable != null)
                 {
+                    unlockable.Lock();
                     if(unlockable.ShouldUnlock(Config))
                         unlockable.Unlock();
                 }

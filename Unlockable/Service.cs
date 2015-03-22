@@ -7,19 +7,22 @@ namespace NewGamePlus
 {
     class Service : IUnlockable
     {
+        private static ItemClass.SubService[] relevantSubservices = new ItemClass.SubService[] { ItemClass.SubService.PublicTransportBus, ItemClass.SubService.PublicTransportMetro, ItemClass.SubService.PublicTransportPlane, ItemClass.SubService.PublicTransportShip, ItemClass.SubService.PublicTransportTrain };
+        private static Dictionary<ItemClass.SubService, MilestoneInfo> unlockMilestonesSubservice = new Dictionary<ItemClass.SubService, MilestoneInfo>();
+
         public void Unlock()
         {
             // Disable the milestones for opening the GUI
             UnlockManager.instance.m_properties.m_ServiceMilestones[(int)ItemClass.Service.PublicTransport] = null;
             
             // Let all panels be viewed, to prevent some rather odd bug with an empty panel showing upon opening the menu
-            UnlockManager.instance.m_properties.m_SubServiceMilestones[(int)ItemClass.SubService.PublicTransportBus] = null;
+            foreach (var service in relevantSubservices)
+            {
+                if (!unlockMilestonesSubservice.ContainsKey(service))
+                    unlockMilestonesSubservice[service] = UnlockManager.instance.m_properties.m_SubServiceMilestones[(int)service];
 
-            // Just for consistency really as we can see the first + all unlocked panels anyway
-            UnlockManager.instance.m_properties.m_SubServiceMilestones[(int)ItemClass.SubService.PublicTransportMetro] = null;
-            UnlockManager.instance.m_properties.m_SubServiceMilestones[(int)ItemClass.SubService.PublicTransportPlane] = null;
-            UnlockManager.instance.m_properties.m_SubServiceMilestones[(int)ItemClass.SubService.PublicTransportShip] = null;
-            UnlockManager.instance.m_properties.m_SubServiceMilestones[(int)ItemClass.SubService.PublicTransportTrain] = null;
+                UnlockManager.instance.m_properties.m_SubServiceMilestones[(int)service] = null;
+            }
 
             // Enable all things we so desired.
             for (int index = 0; index < PrefabCollection<BuildingInfo>.LoadedCount(); ++index)
@@ -33,8 +36,10 @@ namespace NewGamePlus
                 show = show || (Base.Config.Trains && loaded.category == "PublicTransportTrain");
                 show = show || (Base.Config.Airplanes && loaded.category == "PublicTransportPlane");
 
-                if(show)
+                if (show)
                     loaded.m_UnlockMilestone = null;
+                else
+                    loaded.m_UnlockMilestone = loaded.m_UnlockMilestone ?? GetDefaultMilestone(loaded.GetSubService());
             }
 
             for (int index = 0; index < PrefabCollection<TransportInfo>.LoadedCount(); ++index)
@@ -50,7 +55,29 @@ namespace NewGamePlus
 
                 if(show)
                     loaded.m_UnlockMilestone = null;
+                else
+                    loaded.m_UnlockMilestone = loaded.m_UnlockMilestone ?? GetDefaultMilestone(loaded.GetSubService());
             }
+        }
+
+        public void Lock()
+        {
+            for (int index = 0; index < PrefabCollection<TransportInfo>.LoadedCount(); ++index)
+            {
+                TransportInfo loaded = PrefabCollection<TransportInfo>.GetLoaded((uint)index);
+
+                loaded.m_UnlockMilestone = GetDefaultMilestone(loaded.GetSubService());
+            }
+        }
+
+        private MilestoneInfo GetDefaultMilestone(ItemClass.SubService subService)
+        {
+            MilestoneInfo milestone;
+            if (unlockMilestonesSubservice.TryGetValue(subService, out milestone))
+            {
+                return milestone;
+            }
+            return null;
         }
 
         public bool ShouldUnlock(Configuration config)

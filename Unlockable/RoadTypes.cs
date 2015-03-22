@@ -39,6 +39,10 @@ namespace NewGamePlus
                 }
             }
         }
+        public void Lock()
+        {
+            // The game handles all of this already.
+        }
 
         private bool UnlockClass(ItemClass itemClass)
         {

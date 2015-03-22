@@ -12,6 +12,11 @@ namespace NewGamePlus
             UnlockManager.instance.m_properties.m_AreaMilestones = new MilestoneInfo[] { null };
         }
 
+        public void Lock()
+        {
+            // The game handles all of this already.
+        }
+
         public bool ShouldUnlock(Configuration config)
         {
             return config.AllAreas;
