@@ -50,12 +50,12 @@ namespace NewGamePlus
 
         public string Description
         {
-            get { return "Unlock Road Types, all Areas, etc. to be purchasable at Start"; }
+            get { return "unlock all road types, public transport, areas and money at the start"; }
         }
 
         public string Name
         {
-            get { return "Unlock at Start"; }
+            get { return "New Game Plus (NG+)"; }
         }
     }
 
