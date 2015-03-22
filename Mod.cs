@@ -3,6 +3,7 @@ using ColossalFramework.UI;
 using ICities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
@@ -36,15 +37,22 @@ namespace NewGamePlus
 
         private void pluginsChanged()
         {
-            foreach (var plugin in PluginManager.instance.GetPluginsInfo())
+            try
             {
-                // Name is only applicable if deployed as local file, otherwise it'll be the string representation of the steam workshop ID
-                // Debug.LogFormat("Detecting plugins... {0}/{1} -> {2}", plugin.publishedFileID.AsUInt64, plugin.name, plugin.isEnabled);
-                if(plugin.publishedFileID.AsUInt64 == 411769510L || plugin.name == "mbkNewGamePlus")
+                PluginManager.PluginInfo pi = PluginManager.instance.GetPluginsInfo().Where(p => p.publishedFileID.AsUInt64 == 411769510L).FirstOrDefault();
+                if(pi != null)
                 {
-                    // Debug.LogFormat("Found self.");
-                    options.Show(plugin.isEnabled);
+                    DebugOutputPanel.AddMessage(PluginManager.MessageType.Message, string.Format("[NG+] This mod is {0}.", pi.isEnabled ? "enabled" : "disabled"));
+                    options.Show(pi.isEnabled);
                 }
+                else
+                {
+                    DebugOutputPanel.AddMessage(PluginManager.MessageType.Message, "[NG+] Can't find self. No idea if this mod is enabled.");
+                }
+            }
+            catch(Exception e)
+            {
+                DebugOutputPanel.AddMessage(PluginManager.MessageType.Warning, "[NG+] " + e.GetType() + ": " + e.Message);
             }
         }
 
