@@ -154,7 +154,7 @@ namespace NewGamePlus
         private string FormatMoney(long value)
         {
             UICurrencyWrapper uicw = new UICurrencyWrapper(long.MaxValue);
-            uicw.Check(value * 100);
+            uicw.Check(value * 100, Settings.moneyFormatNoCents);
             return uicw.result;
         }
 
