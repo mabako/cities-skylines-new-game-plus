@@ -48,6 +48,7 @@ namespace NewGamePlus
 
             CreateButton("DecreaseMoney", ngpPanel, "-", DecreaseMoney);
             label = CreateLabel("StartMoney", ngpPanel, FormatMoney(Base.Config.StartMoney));
+            label.width = newgameCaption.width/6;
             CreateButton("IncreaseMoney", ngpPanel, "+", IncreaseMoney);
 
             CreateCheckbox(SPRITE_HIGHWAY, ngpPanel, Base.Config.AllRoads, (e) => Base.Config.AllRoads = e, "all roads enabled from the start");
