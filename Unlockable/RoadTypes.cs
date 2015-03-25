@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-
-namespace NewGamePlus
+﻿namespace NewGamePlus
 {
     internal class RoadTypes : IUnlockable
     {
@@ -18,6 +12,9 @@ namespace NewGamePlus
             {
                 NetInfo loaded = PrefabCollection<NetInfo>.GetLoaded((uint)index);
 
+                if (loaded == null || loaded.m_class == null || loaded.m_class.name == null)
+                    continue;
+
                 if (UnlockClass(loaded.m_class))
                     loaded.m_UnlockMilestone = null;
             }
@@ -26,6 +23,10 @@ namespace NewGamePlus
             for (int index = 0; index < PrefabCollection<BuildingInfo>.LoadedCount(); ++index)
             {
                 BuildingInfo loaded = PrefabCollection<BuildingInfo>.GetLoaded((uint)index);
+
+                if (loaded == null || loaded.m_class == null || loaded.m_class.name == null)
+                    continue;
+
                 if (UnlockClass(loaded.m_class))
                 {
                     loaded.m_UnlockMilestone = null;

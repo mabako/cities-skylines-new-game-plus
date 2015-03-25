@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace NewGamePlus
 {
@@ -29,6 +26,9 @@ namespace NewGamePlus
             {
                 BuildingInfo loaded = PrefabCollection<BuildingInfo>.GetLoaded((uint)index);
 
+                if (loaded == null || loaded.category == null)
+                    continue;
+
                 bool show = false;
                 show = show || (Base.Config.Buses && loaded.category == "PublicTransportBus");
                 show = show || (Base.Config.Subways && loaded.category == "PublicTransportMetro");
@@ -45,6 +45,9 @@ namespace NewGamePlus
             for (int index = 0; index < PrefabCollection<TransportInfo>.LoadedCount(); ++index)
             {
                 TransportInfo loaded = PrefabCollection<TransportInfo>.GetLoaded((uint)index);
+
+                if (loaded == null)
+                    continue;
 
                 bool show = false;
                 show = show || (Base.Config.Buses && loaded.GetSubService() == ItemClass.SubService.PublicTransportBus);
